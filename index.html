@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAKERY</title>
+    <style>
+        /* 전체 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+        }
+        
+        body {
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* 네비게이션 바 */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 4rem;
+            background-color: #fff;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        
+        /* 스크롤 시 반투명 네비게이션 바 */
+        nav.transparent {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            padding: 0.5rem 0;
+            display: block;
+        }
+        
+        .nav-link:hover {
+            color: #999;
+        }
+        
+        /* 드롭다운 메뉴 스타일 */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background-color: white;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 0.8rem 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 101;
+        }
+        
+        .nav-item:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .dropdown-item {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            font-size: 0.875rem;
+            padding: 0.8rem 1.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f8f8;
+            color: #000;
+        }
+        
+        /* 드롭다운 메뉴 화살표 */
+        .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 12px;
+            height: 12px;
+            background-color: white;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            border-left: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        /* 햄버거 메뉴 버튼 (기본적으로 숨김) */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            z-index: 102;
+        }
+        
+        .menu-toggle span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: #333;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        /* 햄버거 메뉴 활성화 상태 */
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+        
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+        
+        /* 여기서부터는 기존 CSS 코드와 동일 */
+        /* 히어로 섹션 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 4rem;
+            background-color: #f9f9f9;
+        }
+        
+        .hero-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .hero-image {
+            width: 300px;
+            height: 300px;
+            background-color: #f4f4f4;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-image::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 90%;
+            height: 90%;
+            background-color: #eaeaea;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .hero-text {
+            max-width: 50%;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        
+        .hero-subtitle {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-year {
+            color: #999;
+            font-size: 0.75rem;
+        }
+        
+        /* 메뉴 섹션 */
+        .menu {
+            padding: 6rem 4rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .menu-item {
+            border: 1px solid #f0f0f0;
+            border-radius: 5px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .menu-image {
+            width: 140px;
+            height: 140px;
+            background-color: #f9f9f9;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .item-title {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+        
+        .item-price {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .item-description {
+            color: #999;
+            font-size: 0.75rem;
+        }
+        
+        /* 매장 정보 섹션 */
+        .location {
+            padding: 4rem;
+            background-color: #f9f9f9;
+        }
+        
+        .location-content {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .location-info {
+            max-width: 45%;
+        }
+        
+        .info-item {
+            margin-bottom: 2rem;
+        }
+        
+        .info-title {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-divider {
+            width: 100%;
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 1rem 0;
+        }
+        
+        .info-text {
+            color: #666;
+            font-size: 0.75rem;
+        }
+        
+        .map-container {
+            width: 45%;
+            height: 250px;
+            background-color: #fff;
+            border: 1px solid #f0f0f0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+        
+        /* 푸터 */
+        footer {
+            padding: 2rem 4rem;
+            background-color: #f4f4f4;
+            text-align: center;
+            color: #999;
+            font-size: 0.75rem;
+        }
+        
+        /* 모바일 대응 - 모바일 메뉴 최적화 */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background-color: white;
+                flex-direction: column;
+                gap: 0;
+                padding: 80px 0 20px;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                transition: right 0.3s ease;
+                z-index: 101;
+                overflow-y: auto;
+                overflow-x: hidden; /* 가로 스크롤 방지 */
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-item {
+                width: 100%;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            
+            .nav-link {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+            
+            /* 모바일 드롭다운 최적화 */
+            .dropdown-menu {
+                position: static;
+                left: 0;
+                transform: none;
+                box-shadow: none;
+                width: 100%;
+                max-height: 0;
+                overflow: hidden;
+                opacity: 1;
+                visibility: visible;
+                border-radius: 0;
+                padding: 0;
+                background-color: #f8f8f8;
+                transition: max-height 0.3s ease;
+            }
+            
+            /* 모바일에서 hover 대신 클릭으로만 작동하도록 수정 */
+            .nav-item:hover .dropdown-menu {
+                opacity: 1;
+                visibility: visible;
+                transform: translateX(-50%) translateY(0);
+            }
+            
+            @media (max-width: 768px) {
+                .nav-item:hover .dropdown-menu {
+                    opacity: 1;
+                    visibility: visible;
+                    transform: none;
+                    max-height: 0; /* hover 효과 무시 */
+                }
+            }
+            
+            .dropdown-menu::before {
+                display: none;
+            }
+            
+            /* 확장 표시기 추가 */
+            .nav-link.has-dropdown::after {
+                content: '+';
+                position: absolute;
+                right: 1.5rem;
+                transition: transform 0.3s;
+            }
+            
+            .nav-link.has-dropdown.active::after {
+                transform: rotate(45deg);
+            }
+            
+            .nav-item.active .dropdown-menu {
+                max-height: 500px;
+                padding: 0;
+                position: static;
+                width: 100%;
+                box-sizing: border-box;
+                left: 0;
+                right: 0;
+            }
+            
+            .dropdown-item {
+                padding: 0.8rem 2rem;
+                font-size: 0.9rem;
+                border-top: 1px solid #eee;
+                width: 100%;
+                box-sizing: border-box;
+                white-space: normal;
+                word-wrap: break-word;
+            }
+            
+            /* 모바일 콘텐츠 조정 */
+            .hero {
+                padding: 6rem 2rem 2rem;
+                height: auto;
+            }
+            
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-image {
+                margin-bottom: 2rem;
+                width: 200px;
+                height: 200px;
+            }
+            
+            .hero-text {
+                max-width: 100%;
+            }
+            
+            .menu, .location {
+                padding: 3rem 2rem;
+            }
+            
+            .location-content {
+                flex-direction: column;
+            }
+            
+            .location-info, .map-container {
+                max-width: 100%;
+                width: 100%;
+            }
+            
+            .map-container {
+                margin-top: 2rem;
+                height: 200px;
+            }
+            
+            /* 배경 오버레이 추가 - 메뉴 활성화 시 어두운 배경 */
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s;
+                z-index: 100;
+            }
+            
+            .menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        /* 애니메이션 효과 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .hero-content, .menu-item, .location-content {
+            opacity: 0;
+        }
+
+        /* 스크롤 애니메이션을 위한 지연 */
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- 모바일 메뉴 오버레이 -->
+    <div class="menu-overlay"></div>
+    
+            <!-- 네비게이션 바 -->
+    <nav>
+        <div class="logo">Kimzzy BAKERY</div>
+        
+        <!-- 햄버거 메뉴 버튼 -->
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <div class="nav-links">
+            <div class="nav-item">
+                <a href="#" class="nav-link">HOME</a>
+            </div>
+            <div class="nav-item">
+                <a href="#menu" class="nav-link has-dropdown">MENU</a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item" style="display: block;">베이커리</a>
+                    <a href="#" class="dropdown-item" style="display: block;">디저트</a>
+                    <a href="#" class="dropdown-item" style="display: block;">케이크</a>
+                    <a href="#" class="dropdown-item" style="display: block;">음료</a>
+                    <a href="#" class="dropdown-item" style="display: block;">시즌 메뉴</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <a href="#location" class="nav-link">LOCATION</a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link has-dropdown">CONTACT</a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item" style="display: block;">매장 안내</a>
+                    <a href="#" class="dropdown-item" style="display: block;">문의하기</a>
+                    <a href="#" class="dropdown-item" style="display: block;">FAQ</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-image"></div>
+            <div class="hero-text">
+                <h1 class="hero-title">FRESH BREAD</h1>
+                <p class="hero-subtitle">매일 아침 신선한 재료로 김찌의 손맛을 담아냅니다.</p>
+                <p class="hero-year">SINCE 2025</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 메뉴 섹션 -->
+    <section id="menu" class="menu">
+        <h2 class="section-title">BEST MENU</h2>
+        <div class="menu-grid">
+            <div class="menu-item delay-1">
+                <div class="menu-image"></div>
+                <h3 class="item-title">NUNKARON</h3>
+                <p class="item-price">35,000,000원</p>
+                <p class="item-description">울어서팅팅부운김찌눈카롱</p>
+            </div>
+            <div class="menu-item delay-2">
+                <div class="menu-image"></div>
+                <h3 class="item-title">CREAM BREAD</h3>
+                <p class="item-price">12,800원</p>
+                <p class="item-description">클래식 냉동 크림 빵</p>
+            </div>
+            <div class="menu-item delay-3">
+                <div class="menu-image"></div>
+                <h3 class="item-title">ANGKIMOJJI</h3>
+                <p class="item-price">14,000원</p>
+                <p class="item-description">김찌최애 모찌 빵</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 매장 정보 섹션 -->
+    <section id="location" class="location">
+        <h2 class="section-title">VISIT US</h2>
+        <div class="location-content">
+            <div class="location-info">
+                <div class="info-item">
+                    <h3 class="info-title">OPENING HOURS</h3>
+                    <div class="info-divider"></div>
+                    <p class="info-text">평일 07:00 - 21:00 / 주말 08:00 - 20:00</p>
+                </div>
+                <div class="info-item">
+                    <h3 class="info-title">CONTACT</h3>
+                    <div class="info-divider"></div>
+                    <p class="info-text">02-123-4567 / Kimzzy@bakery.com</p>
+                </div>
+                <div class="info-item">
+                    <h3 class="info-title">ADDRESS</h3>
+                    <div class="info-divider"></div>
+                    <p class="info-text">광주특별시 첨단로</p>
+                </div>
+            </div>
+            <div class="map-container">
+                MAP
+            </div>
+        </div>
+    </section>
+    
+    <!-- 푸터 -->
+    <footer>
+        <p>© 2025 KIMZZY BAKERY. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // 스크롤 애니메이션 처리
+        document.addEventListener('DOMContentLoaded', function() {
+            // 초기 화면 요소 애니메이션
+            setTimeout(() => {
+                document.querySelector('.hero-content').classList.add('animate');
+            }, 100);
+            
+            // 네비게이션 바 스크롤 이벤트 처리
+            const navbar = document.querySelector('nav');
+            
+            window.addEventListener('scroll', function() {
+                // 스크롤 위치가 10px 이상이면 반투명 효과 적용
+                if (window.scrollY > 10) {
+                    navbar.classList.add('transparent');
+                } else {
+                    navbar.classList.remove('transparent');
+                }
+            });
+            
+            // 모바일 메뉴 토글
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            const menuOverlay = document.querySelector('.menu-overlay');
+            
+            menuToggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+                menuOverlay.classList.toggle('active');
+                document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+            });
+            
+            // 메뉴 오버레이 클릭 시 메뉴 닫기
+            menuOverlay.addEventListener('click', function() {
+                menuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+                this.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+            
+            // 모바일 드롭다운 메뉴 토글
+            const hasDropdownLinks = document.querySelectorAll('.nav-link.has-dropdown');
+            
+            // 모바일 환경인지 확인하는 함수
+            const isMobile = () => window.innerWidth <= 768;
+            
+            // 모바일에서 드롭다운 메뉴 초기화 (내용 표시)
+            function initializeDropdownContents() {
+                // 모바일 환경에서는 드롭다운 메뉴에 내용을 미리 준비
+                const dropdownMenus = document.querySelectorAll('.dropdown-menu');
+                
+                if (isMobile()) {
+                    // 모든 드롭다운 메뉴 내용이 보이도록 처리
+                    dropdownMenus.forEach(menu => {
+                        const items = menu.querySelectorAll('.dropdown-item');
+                        items.forEach(item => {
+                            item.style.display = 'block';
+                        });
+                    });
+                }
+            }
+            
+            // 페이지 로딩 시 초기화
+            initializeDropdownContents();
+            
+            hasDropdownLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // 모바일 환경에서만 기본 동작 중지하고 토글
+                    if (isMobile()) {
+                        e.preventDefault();
+                        
+                        // 클릭한 링크의 부모 요소(nav-item)
+                        const parentItem = this.parentElement;
+                        
+                        // 다른 모든 드롭다운 닫기
+                        hasDropdownLinks.forEach(otherLink => {
+                            if (otherLink !== this) {
+                                otherLink.classList.remove('active');
+                                otherLink.parentElement.classList.remove('active');
+                            }
+                        });
+                        
+                        // 현재 항목 토글
+                        this.classList.toggle('active');
+                        parentItem.classList.toggle('active');
+                        
+                        // 내용이 보이게 처리
+                        const dropdown = parentItem.querySelector('.dropdown-menu');
+                        if (dropdown) {
+                            const items = dropdown.querySelectorAll('.dropdown-item');
+                            items.forEach(item => {
+                                item.style.display = 'block';
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // 모바일 메뉴 내의 항목 클릭 시 메뉴 닫기 (드롭다운 제외)
+            const menuItems = document.querySelectorAll('.nav-item a:not(.has-dropdown)');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    if (isMobile()) {
+                        menuToggle.classList.remove('active');
+                        navLinks.classList.remove('active');
+                        menuOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            
+            // 윈도우 리사이즈 시 모바일 메뉴 상태 리셋
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    menuToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                    menuOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                    
+                    // 모든 드롭다운 메뉴 초기화
+                    hasDropdownLinks.forEach(link => {
+                        link.classList.remove('active');
+                        link.parentElement.classList.remove('active');
+                    });
+                } else {
+                    // 모바일 환경으로 전환 시 드롭다운 내용 초기화
+                    initializeDropdownContents();
+                }
+            });
+            
+            // 스크롤 이벤트에 따른 애니메이션
+            const animateOnScroll = function() {
+                const elements = document.querySelectorAll('.menu-item, .location-content');
+                
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.classList.add('animate');
+                    }
+                });
+            };
+            
+            // 초기 실행
+            animateOnScroll();
+            
+            // 스크롤 이벤트에 연결
+            window.addEventListener('scroll', animateOnScroll);
+            
+            // 네비게이션 링크 스무스 스크롤
+            document.querySelectorAll('a[href^="#"]:not(.has-dropdown)').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') {
+                        e.preventDefault();
+                        return;
+                    }
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        
+                        // 모바일 메뉴가 열려있을 때는 약간의 지연 추가
+                        const delay = navLinks.classList.contains('active') ? 300 : 0;
+                        
+                        setTimeout(() => {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 80,
+                                behavior: 'smooth'
+                            });
+                        }, delay);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
