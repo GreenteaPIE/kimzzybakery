@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BAKERY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* 전체 스타일 */
         * {
@@ -65,7 +66,7 @@
         }
         
         .nav-link:hover {
-            color: #999;
+            color: #ff6b6b;
         }
         
         /* 드롭다운 메뉴 스타일 */
@@ -102,7 +103,7 @@
         
         .dropdown-item:hover {
             background-color: #f8f8f8;
-            color: #000;
+            color: #ff6b6b;
         }
         
         /* 드롭다운 메뉴 화살표 */
@@ -160,6 +161,23 @@
             align-items: center;
             padding: 0 4rem;
             background-color: #f9f9f9;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 배경 패턴 추가 */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#f0f0f0 10%, transparent 10%), radial-gradient(#f0f0f0 10%, transparent 10%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.3;
+            z-index: 0;
         }
         
         .hero-content {
@@ -167,15 +185,18 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            position: relative;
+            z-index: 1;
         }
         
         .hero-image {
             width: 300px;
             height: 300px;
-            background-color: #f4f4f4;
+            background-color: #fff;
             border-radius: 50%;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         }
         
         .hero-image::after {
@@ -185,7 +206,8 @@
             left: 50%;
             width: 90%;
             height: 90%;
-            background-color: #eaeaea;
+            background-color: #ff6b6b;
+            opacity: 0.1;
             border-radius: 50%;
             transform: translate(-50%, -50%);
         }
@@ -198,16 +220,48 @@
             font-size: 2.5rem;
             margin-bottom: 1rem;
             letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background-color: #ff6b6b;
         }
         
         .hero-subtitle {
             color: #666;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
         
         .hero-year {
             color: #999;
             font-size: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        
+        .hero-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .hero-button:hover {
+            background-color: #ff5252;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
         }
         
         /* 메뉴 섹션 */
@@ -217,8 +271,29 @@
         
         .section-title {
             font-size: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
             letter-spacing: 1px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: #ff6b6b;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 3rem;
+            font-size: 0.9rem;
         }
         
         .menu-grid {
@@ -229,15 +304,17 @@
         
         .menu-item {
             border: 1px solid #f0f0f0;
-            border-radius: 5px;
+            border-radius: 10px;
             padding: 2rem;
             text-align: center;
             transition: transform 0.3s, box-shadow 0.3s;
+            background-color: white;
         }
         
         .menu-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-color: transparent;
         }
         
         .menu-image {
@@ -248,33 +325,117 @@
             margin: 0 auto 1.5rem;
             position: relative;
             overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .menu-item:hover .menu-image {
+            transform: scale(1.05);
         }
         
         .item-title {
             font-size: 1rem;
             margin-bottom: 0.5rem;
             letter-spacing: 1px;
+            color: #333;
         }
         
         .item-price {
-            color: #666;
-            margin-bottom: 0.5rem;
+            color: #ff6b6b;
+            margin-bottom: 0.8rem;
+            font-weight: bold;
         }
         
         .item-description {
             color: #999;
             font-size: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .item-button {
+            display: inline-block;
+            padding: 8px 20px;
+            background-color: transparent;
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .item-button:hover {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        
+        /* 특별 제안 섹션 */
+        .special-offer {
+            padding: 4rem;
+            background-color: #fff6f6;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .special-offer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ff6b6b' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            z-index: 0;
+        }
+        
+        .special-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .special-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ff6b6b;
+        }
+        
+        .special-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .special-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .special-button:hover {
+            background-color: #ff5252;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
         }
         
         /* 매장 정보 섹션 */
         .location {
-            padding: 4rem;
+            padding: 6rem 4rem;
             background-color: #f9f9f9;
         }
         
         .location-content {
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 3rem;
         }
         
         .location-info {
@@ -282,12 +443,19 @@
         }
         
         .info-item {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
         
         .info-title {
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-icon {
+            margin-right: 10px;
+            color: #ff6b6b;
         }
         
         .info-divider {
@@ -299,28 +467,188 @@
         
         .info-text {
             color: #666;
-            font-size: 0.75rem;
+            font-size: 0.9rem;
         }
         
         .map-container {
             width: 45%;
-            height: 250px;
+            height: 350px;
             background-color: #fff;
-            border: 1px solid #f0f0f0;
-            border-radius: 5px;
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #999;
         }
         
+        /* 뉴스레터 섹션 */
+        .newsletter {
+            padding: 4rem;
+            background-color: #fff;
+            text-align: center;
+        }
+        
+        .newsletter-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            margin-top: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        
+        .newsletter-input {
+            flex: 1;
+            border: 1px solid #f0f0f0;
+            border-right: none;
+            padding: 15px 20px;
+            font-size: 0.9rem;
+            outline: none;
+            border-radius: 50px 0 0 50px;
+        }
+        
+        .newsletter-button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 0 50px 50px 0;
+        }
+        
+        .newsletter-button:hover {
+            background-color: #ff5252;
+        }
+        
         /* 푸터 */
         footer {
-            padding: 2rem 4rem;
-            background-color: #f4f4f4;
+            padding: 4rem 4rem 2rem;
+            background-color: #333;
+            color: #fff;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 2rem;
+            padding-right: 2rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        
+        .footer-description {
+            color: #aaa;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: #ff6b6b;
+            transform: translateY(-3px);
+        }
+        
+        .footer-title {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background-color: #ff6b6b;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-link {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-link a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-link a:hover {
+            color: #ff6b6b;
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        .contact-icon {
+            margin-right: 10px;
+            color: #ff6b6b;
+            font-size: 1rem;
+        }
+        
+        .copyright {
             text-align: center;
-            color: #999;
-            font-size: 0.75rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #777;
+            font-size: 0.8rem;
         }
         
         /* 모바일 대응 - 모바일 메뉴 최적화 */
@@ -348,7 +676,7 @@
                 transition: right 0.3s ease;
                 z-index: 101;
                 overflow-y: auto;
-                overflow-x: hidden; /* 가로 스크롤 방지 */
+                overflow-x: hidden;
             }
             
             .nav-links.active {
@@ -432,11 +760,16 @@
                 box-sizing: border-box;
                 white-space: normal;
                 word-wrap: break-word;
+                display: block;
             }
             
             /* 모바일 콘텐츠 조정 */
+            .hero, .menu, .location, .special-offer, .newsletter {
+                padding: 3rem 2rem;
+            }
+            
             .hero {
-                padding: 6rem 2rem 2rem;
+                padding-top: 6rem;
                 height: auto;
             }
             
@@ -455,8 +788,13 @@
                 max-width: 100%;
             }
             
-            .menu, .location {
-                padding: 3rem 2rem;
+            .hero-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
             }
             
             .location-content {
@@ -470,7 +808,32 @@
             
             .map-container {
                 margin-top: 2rem;
-                height: 200px;
+                height: 250px;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+                border-radius: 10px;
+                box-shadow: none;
+            }
+            
+            .newsletter-input {
+                border-radius: 10px;
+                border: 1px solid #f0f0f0;
+                margin-bottom: 1rem;
+            }
+            
+            .newsletter-button {
+                border-radius: 10px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+            
+            .footer-column {
+                width: 100%;
+                padding-right: 0;
             }
             
             /* 배경 오버레이 추가 - 메뉴 활성화 시 어두운 배경 */
@@ -503,7 +866,7 @@
             animation: fadeIn 0.8s ease forwards;
         }
 
-        .hero-content, .menu-item, .location-content {
+        .hero-content, .menu-item, .location-content, .special-content, .newsletter-content, .footer-content {
             opacity: 0;
         }
 
@@ -511,13 +874,46 @@
         .delay-1 { animation-delay: 0.2s; }
         .delay-2 { animation-delay: 0.4s; }
         .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        
+        /* 맨 위로 버튼 */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            background-color: #ff5252;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
     </style>
 </head>
 <body>
     <!-- 모바일 메뉴 오버레이 -->
     <div class="menu-overlay"></div>
     
-            <!-- 네비게이션 바 -->
+    <!-- 네비게이션 바 -->
     <nav>
         <div class="logo">Kimzzy BAKERY</div>
         
@@ -564,6 +960,7 @@
                 <h1 class="hero-title">FRESH BREAD</h1>
                 <p class="hero-subtitle">매일 아침 신선한 재료로 김찌의 손맛을 담아냅니다.</p>
                 <p class="hero-year">SINCE 2025</p>
+                <a href="#menu" class="hero-button">메뉴 보기</a>
             </div>
         </div>
     </section>
@@ -571,60 +968,143 @@
     <!-- 메뉴 섹션 -->
     <section id="menu" class="menu">
         <h2 class="section-title">BEST MENU</h2>
+        <p class="section-subtitle">김찌 베이커리의 시그니처 메뉴를 만나보세요</p>
         <div class="menu-grid">
             <div class="menu-item delay-1">
                 <div class="menu-image"></div>
                 <h3 class="item-title">NUNKARON</h3>
                 <p class="item-price">35,000,000원</p>
                 <p class="item-description">울어서팅팅부운김찌눈카롱</p>
+                <a href="#" class="item-button">주문하기</a>
             </div>
             <div class="menu-item delay-2">
                 <div class="menu-image"></div>
                 <h3 class="item-title">CREAM BREAD</h3>
                 <p class="item-price">12,800원</p>
                 <p class="item-description">클래식 냉동 크림 빵</p>
+                <a href="#" class="item-button">주문하기</a>
             </div>
             <div class="menu-item delay-3">
                 <div class="menu-image"></div>
                 <h3 class="item-title">ANGKIMOJJI</h3>
                 <p class="item-price">14,000원</p>
                 <p class="item-description">김찌최애 모찌 빵</p>
+                <a href="#" class="item-button">주문하기</a>
+            </div>
+            <div class="menu-item delay-4">
+                <div class="menu-image"></div>
+                <h3 class="item-title">CROISSANT</h3>
+                <p class="item-price">4,500원</p>
+                <p class="item-description">바삭한 겉과 부드러운 속의 크루아상</p>
+                <a href="#" class="item-button">주문하기</a>
             </div>
         </div>
     </section>
     
+    <!-- 특별 제안 섹션 -->
+    <section class="special-offer">
+        <div class="special-content animate">
+            <h2 class="special-title">오늘의 특별 할인</h2>
+            <p class="special-subtitle">오직 온라인에서만! 신메뉴 출시를 기념하여 3월 한 달간 모든 제품 15% 할인</p>
+            <a href="#" class="special-button">지금 주문하기</a>
+        </div>
+    </section>
+
     <!-- 매장 정보 섹션 -->
     <section id="location" class="location">
         <h2 class="section-title">VISIT US</h2>
-        <div class="location-content">
+        <p class="section-subtitle">최고의 베이커리를 경험할 수 있는 곳</p>
+        <div class="location-content animate">
             <div class="location-info">
                 <div class="info-item">
-                    <h3 class="info-title">OPENING HOURS</h3>
+                    <h3 class="info-title"><i class="fas fa-clock info-icon"></i>OPENING HOURS</h3>
                     <div class="info-divider"></div>
                     <p class="info-text">평일 07:00 - 21:00 / 주말 08:00 - 20:00</p>
                 </div>
                 <div class="info-item">
-                    <h3 class="info-title">CONTACT</h3>
+                    <h3 class="info-title"><i class="fas fa-phone-alt info-icon"></i>CONTACT</h3>
                     <div class="info-divider"></div>
                     <p class="info-text">02-123-4567 / Kimzzy@bakery.com</p>
                 </div>
                 <div class="info-item">
-                    <h3 class="info-title">ADDRESS</h3>
+                    <h3 class="info-title"><i class="fas fa-map-marker-alt info-icon"></i>ADDRESS</h3>
                     <div class="info-divider"></div>
-                    <p class="info-text">행복과 꿈의 동산</p>
+                    <p class="info-text">광주특별시 첨단로</p>
+                </div>
+                <div class="info-item">
+                    <h3 class="info-title"><i class="fas fa-utensils info-icon"></i>SERVICES</h3>
+                    <div class="info-divider"></div>
+                    <p class="info-text">테이크아웃, 예약 주문, 배달 서비스, 케이터링</p>
                 </div>
             </div>
             <div class="map-container">
-                MAP
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3260.3239822555055!2d129.05818115070455!3d35.198033980222524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568eb2501b9cf99%3A0x5aa68e5ded5b1224!2s%EA%B4%91%EC%A3%BC%EA%B4%91%EC%97%AD%EC%8B%9C!5e0!3m2!1sko!2skr!4v1650000000000!5m2!1sko!2skr" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </section>
-    
+
+    <!-- 뉴스레터 섹션 -->
+    <section class="newsletter">
+        <div class="newsletter-content animate">
+            <h2 class="section-title">뉴스레터 구독</h2>
+            <p class="section-subtitle">최신 소식과 할인 정보를 가장 먼저 받아보세요</p>
+            <form class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="이메일 주소를 입력하세요">
+                <button type="submit" class="newsletter-button">구독하기</button>
+            </form>
+        </div>
+    </section>
+
     <!-- 푸터 -->
     <footer>
-        <p>© 2025 KIMZZY BAKERY. All Rights Reserved.</p>
+        <div class="footer-content animate">
+            <div class="footer-column">
+                <div class="footer-logo">Kimzzy BAKERY</div>
+                <p class="footer-description">매일 아침 신선한 재료로 정성껏 만드는 김찌 베이커리에서 특별한 경험을 만나보세요.</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">빠른 링크</h3>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="#">홈</a></li>
+                    <li class="footer-link"><a href="#menu">메뉴</a></li>
+                    <li class="footer-link"><a href="#location">매장 안내</a></li>
+                    <li class="footer-link"><a href="#">문의하기</a></li>
+                    <li class="footer-link"><a href="#">자주 묻는 질문</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">연락처</h3>
+                <ul class="contact-info">
+                    <li class="contact-item">
+                        <i class="fas fa-map-marker-alt contact-icon"></i>
+                        광주특별시 첨단로
+                    </li>
+                    <li class="contact-item">
+                        <i class="fas fa-phone-alt contact-icon"></i>
+                        02-123-4567
+                    </li>
+                    <li class="contact-item">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        Kimzzy@bakery.com
+                    </li>
+                    <li class="contact-item">
+                        <i class="fas fa-clock contact-icon"></i>
+                        평일 07:00 - 21:00 / 주말 08:00 - 20:00
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2025 KIMZZY BAKERY. All Rights Reserved.</p>
+        </div>
     </footer>
-
+    
     <script>
         // 스크롤 애니메이션 처리
         document.addEventListener('DOMContentLoaded', function() {
@@ -635,6 +1115,7 @@
             
             // 네비게이션 바 스크롤 이벤트 처리
             const navbar = document.querySelector('nav');
+            const backToTop = document.querySelector('.back-to-top');
             
             window.addEventListener('scroll', function() {
                 // 스크롤 위치가 10px 이상이면 반투명 효과 적용
@@ -643,6 +1124,22 @@
                 } else {
                     navbar.classList.remove('transparent');
                 }
+                
+                // 맨 위로 버튼 표시/숨김
+                if (window.scrollY > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+            
+            // 맨 위로 버튼 클릭 이벤트
+            backToTop.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             });
             
             // 모바일 메뉴 토글
@@ -724,7 +1221,7 @@
             });
             
             // 모바일 메뉴 내의 항목 클릭 시 메뉴 닫기 (드롭다운 제외)
-            const menuItems = document.querySelectorAll('.nav-item a:not(.has-dropdown)');
+            const menuItems = document.querySelectorAll('.nav-item a:not(.has-dropdown), .dropdown-item');
             
             menuItems.forEach(item => {
                 item.addEventListener('click', function() {
@@ -758,7 +1255,7 @@
             
             // 스크롤 이벤트에 따른 애니메이션
             const animateOnScroll = function() {
-                const elements = document.querySelectorAll('.menu-item, .location-content');
+                const elements = document.querySelectorAll('.menu-item, .location-content, .special-content, .newsletter-content, .footer-content');
                 
                 elements.forEach(element => {
                     const elementPosition = element.getBoundingClientRect().top;
@@ -801,6 +1298,27 @@
                     }
                 });
             });
+            
+            // 뉴스레터 폼 제출 이벤트
+            const newsletterForm = document.querySelector('.newsletter-form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const emailInput = this.querySelector('.newsletter-input');
+                    const email = emailInput.value.trim();
+                    
+                    // 간단한 이메일 유효성 검사
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (emailRegex.test(email)) {
+                        // 성공 메시지 표시
+                        alert('뉴스레터 구독이 완료되었습니다!');
+                        emailInput.value = '';
+                    } else {
+                        // 오류 메시지 표시
+                        alert('유효한 이메일 주소를 입력해주세요.');
+                    }
+                });
+            }
         });
     </script>
 </body>
