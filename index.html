@@ -1309,11 +1309,17 @@
             const navLinks = document.querySelector('.nav-links');
             const menuOverlay = document.querySelector('.menu-overlay');
             
-            menuToggle.addEventListener('click', function() {
+            // 햄버거 메뉴 클릭 이벤트
+            menuToggle.addEventListener('click', function(e) {
+                e.preventDefault(); // 기본 동작 방지
+                e.stopPropagation(); // 이벤트 버블링 방지
+                
                 this.classList.toggle('active');
                 navLinks.classList.toggle('active');
                 menuOverlay.classList.toggle('active');
                 document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+                
+                console.log('메뉴 토글 클릭됨: ', navLinks.classList.contains('active') ? '활성화' : '비활성화');
             });
             
             // 메뉴 오버레이 클릭 시 메뉴 닫기
@@ -1330,11 +1336,13 @@
             // 모바일 환경인지 확인하는 함수
             const isMobile = () => window.innerWidth <= 768;
             
+            // 드롭다운 메뉴 클릭 이벤트 
             hasDropdownLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     // 모바일 환경에서만 기본 동작 중지하고 토글
                     if (isMobile()) {
                         e.preventDefault();
+                        e.stopPropagation(); // 이벤트 버블링 방지
                         
                         // 클릭한 링크의 부모 요소(nav-item)
                         const parentItem = this.parentElement;
